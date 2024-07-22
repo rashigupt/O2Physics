@@ -13,7 +13,8 @@
 using namespace std;
 Double_t pi = M_PI;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[])
+{
 
   Pythia8::Pythia pythia;
   int multBins = 500;
@@ -32,8 +33,8 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  TFile *outFile =
-      new TFile(Form("ex_PbPb_2760_Ev%i_Sd%i.root", nevents, seed), "RECREATE");
+  TFile* outFile =
+    new TFile(Form("ex_PbPb_2760_Ev%i_Sd%i.root", nevents, seed), "RECREATE");
 
   pythia.readString("Random:setSeed = on");
   pythia.readString(Form("Random:seed %d", seed));
@@ -58,83 +59,84 @@ int main(int argc, char *argv[]) {
   pythia.readString("113:addChannel = 1 0.0000180 0 211 -211 211 -211 ");
   pythia.readString("113:addchannel =1 0.0001009 1 211 -211 111");
   pythia.readString(
-      "223:addChannel = 1 0.0154283 2 211 -211"); // omega add channel
+    "223:addChannel = 1 0.0154283 2 211 -211"); // omega add channel
   pythia.readString(
-      "223:addChannel = 1 0.8994773 1 211 -211 111"); // omegA channel add
+    "223:addChannel = 1 0.8994773 1 211 -211 111"); // omegA channel add
   pythia.readString(
-      "221: addchannel = 1  0.2274105 211 -211 111"); // eta  channel add
+    "221: addchannel = 1  0.2274105 211 -211 111"); // eta  channel add
   pythia.readString(
-      "221:addChannel =  1  0.0460021 211 -211 22"); //  eta channel add
+    "221:addChannel =  1  0.0460021 211 -211 22"); //  eta channel add
   pythia.readString(
-      "221:addchannel: = 1 0.0002680 12 211 -211 11 -11"); // eta channel add
+    "221:addchannel: = 1 0.0002680 12 211 -211 11 -11"); // eta channel add
 
   // for Heavy ion collision
   pythia.readString(
-      "HeavyIon:SigFitDefPar =  12.32,1.63,0.19,0.0,0.0,0.0,0.0,0.0");
+    "HeavyIon:SigFitDefPar =  12.32,1.63,0.19,0.0,0.0,0.0,0.0,0.0");
   pythia.readString("HeavyIon:SigFitNGen = 20");
-  pythia.readString("HeavyIon:SigFitErr = "
-                    "0.02,0.02,0.1,0.05,0.05,0.0,0.1,0.0");
+  pythia.readString(
+    "HeavyIon:SigFitErr = "
+    "0.02,0.02,0.1,0.05,0.05,0.0,0.1,0.0");
   pythia.init();
 
   Int_t nbins[5] = {32., 30., 40., 40., 150.};
   Double_t xmin[5] = {-TMath::Pi(), -1.6, 0., 0., -0.5};
   Double_t xmax[5] = {TMath::Pi(), 1.6, 20., 20., 149.5};
 
-  THnSparseD *sparseULpipi =
-      new THnSparseD("sparseULpipi", "sparse1", 5, nbins, xmin, xmax);
-  THnSparseD *sparseLpipiplus = new THnSparseD(
-      "sparseLpipiplus ", "sparseLpipiplus", 5, nbins, xmin, xmax);
-  THnSparseD *sparseULpipioppo = new THnSparseD(
-      "sparseULpipioppo", "sparseULpipioppo", 5, nbins, xmin, xmax);
-  THnSparseD *sparseLpipineg =
-      new THnSparseD("sparseLpipineg", "sparseLpipineg", 5, nbins, xmin, xmax);
-  TH2D *pipluspinegcorr =
-      new TH2D("pipluspinegcorr", "pipluspinegcorr", 32, -0.5 * TMath::Pi(),
-               1.5 * TMath::Pi(), 30, -1.6, 1.6);
+  THnSparseD* sparseULpipi =
+    new THnSparseD("sparseULpipi", "sparse1", 5, nbins, xmin, xmax);
+  THnSparseD* sparseLpipiplus = new THnSparseD(
+    "sparseLpipiplus ", "sparseLpipiplus", 5, nbins, xmin, xmax);
+  THnSparseD* sparseULpipioppo = new THnSparseD(
+    "sparseULpipioppo", "sparseULpipioppo", 5, nbins, xmin, xmax);
+  THnSparseD* sparseLpipineg =
+    new THnSparseD("sparseLpipineg", "sparseLpipineg", 5, nbins, xmin, xmax);
+  TH2D* pipluspinegcorr =
+    new TH2D("pipluspinegcorr", "pipluspinegcorr", 32, -0.5 * TMath::Pi(),
+             1.5 * TMath::Pi(), 30, -1.6, 1.6);
 
-  THnSparseD *sparseULkk =
-      new THnSparseD("sparseULkk", "sparse1", 5, nbins, xmin, xmax);
-  THnSparseD *sparseLkkplus =
-      new THnSparseD("sparseLkkplus ", "sparseLkkplus", 5, nbins, xmin, xmax);
-  THnSparseD *sparseULkkoppo =
-      new THnSparseD("sparseULkkoppo", "sparseULkkoppo", 5, nbins, xmin, xmax);
-  THnSparseD *sparseLkkneg =
-      new THnSparseD("sparseLkkneg", "sparseLkkneg", 5, nbins, xmin, xmax);
+  THnSparseD* sparseULkk =
+    new THnSparseD("sparseULkk", "sparse1", 5, nbins, xmin, xmax);
+  THnSparseD* sparseLkkplus =
+    new THnSparseD("sparseLkkplus ", "sparseLkkplus", 5, nbins, xmin, xmax);
+  THnSparseD* sparseULkkoppo =
+    new THnSparseD("sparseULkkoppo", "sparseULkkoppo", 5, nbins, xmin, xmax);
+  THnSparseD* sparseLkkneg =
+    new THnSparseD("sparseLkkneg", "sparseLkkneg", 5, nbins, xmin, xmax);
 
-  THnSparseD *sparseULpp =
-      new THnSparseD("sparseULpp", "sparse1", 5, nbins, xmin, xmax);
-  THnSparseD *sparseLppplus =
-      new THnSparseD("sparseLppplus ", "sparseLppplus", 5, nbins, xmin, xmax);
-  THnSparseD *sparseULppoppo =
-      new THnSparseD("sparseULppoppo", "sparseULppoppo", 5, nbins, xmin, xmax);
-  THnSparseD *sparseLppneg =
-      new THnSparseD("sparseLppneg", "sparseLppneg", 5, nbins, xmin, xmax);
+  THnSparseD* sparseULpp =
+    new THnSparseD("sparseULpp", "sparse1", 5, nbins, xmin, xmax);
+  THnSparseD* sparseLppplus =
+    new THnSparseD("sparseLppplus ", "sparseLppplus", 5, nbins, xmin, xmax);
+  THnSparseD* sparseULppoppo =
+    new THnSparseD("sparseULppoppo", "sparseULppoppo", 5, nbins, xmin, xmax);
+  THnSparseD* sparseLppneg =
+    new THnSparseD("sparseLppneg", "sparseLppneg", 5, nbins, xmin, xmax);
 
-  double *asparseULpipi = new double[5];
-  double *asparseLpipiplus = new double[5];
-  double *asparseULpipioppo = new double[5];
-  double *asparseLpipineg = new double[5];
-  double *asparseULkk = new double[5];
-  double *asparseLkkplus = new double[5];
-  double *asparseULkkoppo = new double[5];
-  double *asparseLkkneg = new double[5];
-  double *asparseULpp = new double[5];
-  double *asparseLppplus = new double[5];
-  double *asparseULppoppo = new double[5];
-  double *asparseLppneg = new double[5];
-  TH1D *multiplicity =
-      new TH1D("multiplicity", "multiplicity", 150, -0.5, 149.5);
-  TH1D *multiplicityV0 =
-      new TH1D("multiplicityV0", "multiplicityV0", 150, -0.5, 149.5);
-  TH1D *multiplicitytrk =
-      new TH1D("multiplicitytrk", "multiplicitytrk", 150, -0.5, 149.5);
+  double* asparseULpipi = new double[5];
+  double* asparseLpipiplus = new double[5];
+  double* asparseULpipioppo = new double[5];
+  double* asparseLpipineg = new double[5];
+  double* asparseULkk = new double[5];
+  double* asparseLkkplus = new double[5];
+  double* asparseULkkoppo = new double[5];
+  double* asparseLkkneg = new double[5];
+  double* asparseULpp = new double[5];
+  double* asparseLppplus = new double[5];
+  double* asparseULppoppo = new double[5];
+  double* asparseLppneg = new double[5];
+  TH1D* multiplicity =
+    new TH1D("multiplicity", "multiplicity", 150, -0.5, 149.5);
+  TH1D* multiplicityV0 =
+    new TH1D("multiplicityV0", "multiplicityV0", 150, -0.5, 149.5);
+  TH1D* multiplicitytrk =
+    new TH1D("multiplicitytrk", "multiplicitytrk", 150, -0.5, 149.5);
 
-  TH1D *piptplustri = new TH1D("piptplustri", "piptplustri", 100, 0., 20.0);
-  TH1D *piptnegtri = new TH1D("piptnegtri", "piptnegtri", 100, 0., 20.0);
-  TH1D *kptplustri = new TH1D("kiptplustri", "kptplustri", 100, 0., 20.0);
-  TH1D *kptnegtri = new TH1D("kptnegtri", "kptnegtri", 100, 0., 20.0);
-  TH1D *proptplustri = new TH1D("proptplustri", "proptplustri", 100, 0., 20.0);
-  TH1D *proptnegtri = new TH1D("proptnegtri", "proptnegtri", 100, 0., 20.0);
+  TH1D* piptplustri = new TH1D("piptplustri", "piptplustri", 100, 0., 20.0);
+  TH1D* piptnegtri = new TH1D("piptnegtri", "piptnegtri", 100, 0., 20.0);
+  TH1D* kptplustri = new TH1D("kiptplustri", "kptplustri", 100, 0., 20.0);
+  TH1D* kptnegtri = new TH1D("kptnegtri", "kptnegtri", 100, 0., 20.0);
+  TH1D* proptplustri = new TH1D("proptplustri", "proptplustri", 100, 0., 20.0);
+  TH1D* proptnegtri = new TH1D("proptnegtri", "proptnegtri", 100, 0., 20.0);
 
   for (int iEvent = 0; iEvent < nevents; ++iEvent) {
 
@@ -186,7 +188,7 @@ int main(int argc, char *argv[]) {
     Double_t ytrig = 0;
     for (int i = 0; i < enteries; i++) {
 
-      Pythia8::Particle &particle = pythia.event[i];
+      Pythia8::Particle& particle = pythia.event[i];
 
       if (inel == 1 && pythia.event[i].isCharged() &&
           pythia.event[i].isFinal()) {
