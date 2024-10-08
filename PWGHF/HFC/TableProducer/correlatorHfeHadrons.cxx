@@ -40,11 +40,11 @@ using namespace o2::aod::hf_sel_electron;
 std::vector<double> zBins{VARIABLE_WIDTH, -10.0, -2.5, 2.5, 10.0};
 std::vector<double> multBins{VARIABLE_WIDTH, 0., 200., 500.0, 5000.};
 std::vector<double> multBinsMcGen{
-    VARIABLE_WIDTH, 0., 20., 50.0,
-    500.}; // In MCGen multiplicity is defined by counting primaries
+  VARIABLE_WIDTH, 0., 20., 50.0,
+  500.}; // In MCGen multiplicity is defined by counting primaries
 using BinningType = ColumnBinningPolicy<
-    aod::collision::PosZ,
-    aod::mult::MultFV0M<aod::mult::MultFV0A, aod::mult::MultFV0C>>;
+  aod::collision::PosZ,
+  aod::mult::MultFV0M<aod::mult::MultFV0A, aod::mult::MultFV0C>>;
 BinningType corrBinning{{zBins, multBins}, true};
 
 struct HfCorrelatorHfeHadrons {
@@ -58,8 +58,8 @@ struct HfCorrelatorHfeHadrons {
 
   // Associated Hadron selection
   Configurable<float> ptTrackMin{
-      "ptTrackMin", 0.1f,
-      "Transverse momentum range for associated hadron tracks"};
+    "ptTrackMin", 0.1f,
+    "Transverse momentum range for associated hadron tracks"};
   Configurable<float> etaTrackMax{"etaTrackMax", 0.8f,
                                   "Eta range  for associated hadron tracks"};
   Configurable<float> etaTrackMin{"etaTrackMin", -0.8f,
@@ -69,19 +69,19 @@ struct HfCorrelatorHfeHadrons {
 
   // Electron hadron correlation condition
   Configurable<bool> ptCondition{
-      "ptCondition", true,
-      "Electron pT should be greater than associate particle pT"};
+    "ptCondition", true,
+    "Electron pT should be greater than associate particle pT"};
 
   using TableCollisions = o2::soa::Filtered<
-      o2::soa::Join<aod::Collisions, aod::Mults, aod::EvSels>>;
+    o2::soa::Join<aod::Collisions, aod::Mults, aod::EvSels>>;
   using TableCollision = TableCollisions::iterator;
   using TableTracks =
-      o2::soa::Join<o2::aod::Tracks, o2::aod::TracksCov, o2::aod::TracksExtra,
-                    o2::aod::TracksDCA, o2::aod::TrackSelection,
-                    o2::aod::TrackSelectionExtension>;
+    o2::soa::Join<o2::aod::Tracks, o2::aod::TracksCov, o2::aod::TracksExtra,
+                  o2::aod::TracksDCA, o2::aod::TrackSelection,
+                  o2::aod::TrackSelectionExtension>;
 
   using McTableCollisions =
-      o2::soa::Filtered<o2::soa::Join<TableCollisions, aod::McCollisionLabels>>;
+    o2::soa::Filtered<o2::soa::Join<TableCollisions, aod::McCollisionLabels>>;
   using McTableCollision = McTableCollisions::iterator;
   using McTableTracks = soa::Join<TableTracks, aod::McTrackLabels>;
 
@@ -90,33 +90,36 @@ struct HfCorrelatorHfeHadrons {
   Preslice<aod::Tracks> perCol = aod::track::collisionId;
   Preslice<aod::HfSelEl> perCollision = aod::hf_sel_electron::collisionId;
   HistogramConfigSpec hCorrelSpec{
-      HistType::kTHnSparseD,
-      {{30, 0., 30.},
-       {20, 0., 20.},
-       {32, -o2::constants::math::PIHalf, 3. * o2::constants::math::PIHalf},
-       {50, -1.8, 1.8}}};
+    HistType::kTHnSparseD,
+    {{30, 0., 30.},
+     {20, 0., 20.},
+     {32, -o2::constants::math::PIHalf, 3. * o2::constants::math::PIHalf},
+     {50, -1.8, 1.8}}};
 
   HistogramRegistry registry{
-      "registry",
-      {{"hInclusiveEHCorrel",
-        "Sparse for Delta phi and Delta eta Inclusive Electron with "
-        "Hadron;p_{T}^{e} (GeV#it{/c});p_{T}^{h} "
-        "(GeV#it{/c});#Delta#varphi;#Delta#eta;",
-        hCorrelSpec},
-       {"hptElectron", "hptElectron", {HistType::kTH1F, {{100, 0, 100}}}},
-       {"hMixEventInclusiveEHCorrl",
-        "Sparse for mix event Delta phi and Delta eta Inclusive Electron with "
-        "Hadron;p_{T}^{e} (GeV#it{/c});p_{T}^{h} "
-        "(GeV#it{/c});#Delta#varphi;#Delta#eta;",
-        hCorrelSpec}}};
+    "registry",
+    {{"hInclusiveEHCorrel",
+      "Sparse for Delta phi and Delta eta Inclusive Electron with "
+      "Hadron;p_{T}^{e} (GeV#it{/c});p_{T}^{h} "
+      "(GeV#it{/c});#Delta#varphi;#Delta#eta;",
+      hCorrelSpec},
+     {"hptElectron", "hptElectron", {HistType::kTH1F, {{100, 0, 100}}}},
+     {"hMixEventInclusiveEHCorrl",
+      "Sparse for mix event Delta phi and Delta eta Inclusive Electron with "
+      "Hadron;p_{T}^{e} (GeV#it{/c});p_{T}^{h} "
+      "(GeV#it{/c});#Delta#varphi;#Delta#eta;",
+      hCorrelSpec}}};
 
-  void init(InitContext &) {
+  void init(InitContext&)
+  {
     registry.get<THnSparse>(HIST("hInclusiveEHCorrel"))->Sumw2();
     registry.get<THnSparse>(HIST("hMixEventInclusiveEHCorrl"))->Sumw2();
   }
 
   // Associated Hadron Selection Cut
-  template <typename T> bool selAssoHadron(T const &track) {
+  template <typename T>
+  bool selAssoHadron(T const& track)
+  {
     if (!track.isGlobalTrackWoDCA()) {
       return false;
     }
@@ -136,13 +139,14 @@ struct HfCorrelatorHfeHadrons {
 
   // Electron-hadron Correlation
   template <typename TracksType, typename ElectronType, typename CollisionType>
-  void fillCorrelation(CollisionType const &collision,
-                       ElectronType const &electron, TracksType const &tracks) {
+  void fillCorrelation(CollisionType const& collision,
+                       ElectronType const& electron, TracksType const& tracks)
+  {
     if (!(isRun3 ? collision.sel8()
                  : (collision.sel7() && collision.alias_bit(kINT7))))
       return;
     int poolBin = corrBinning.getBin(
-        std::make_tuple(collision.posZ(), collision.multFV0M()));
+      std::make_tuple(collision.posZ(), collision.multFV0M()));
 
     //  Construct Deta Phi between electrons and hadrons
 
@@ -151,7 +155,7 @@ struct HfCorrelatorHfeHadrons {
     double etaElectron = -999;
     int electronTrackId = 0;
 
-    for (const auto &eTrack : electron) {
+    for (const auto& eTrack : electron) {
       ptElectron = eTrack.ptTrack();
       phiElectron = eTrack.phiTrack();
       etaElectron = eTrack.etaTrack();
@@ -166,7 +170,7 @@ struct HfCorrelatorHfeHadrons {
         continue;
 
       registry.fill(HIST("hptElectron"), ptElectron);
-      for (const auto &hTrack : tracks) {
+      for (const auto& hTrack : tracks) {
         hadronTrackId = hTrack.globalIndex();
         if (hadronTrackId == electronTrackId)
           continue;
@@ -194,9 +198,10 @@ struct HfCorrelatorHfeHadrons {
 
   template <typename TracksType, typename ElectronType, typename CollisionType1,
             typename CollisionType2>
-  void fillMixCorrelation(CollisionType1 const &c1, CollisionType2 const &c2,
-                          ElectronType const &tracks1,
-                          TracksType const &tracks2) {
+  void fillMixCorrelation(CollisionType1 const& c1, CollisionType2 const& c2,
+                          ElectronType const& tracks1,
+                          TracksType const& tracks2)
+  {
     if (!(isRun3 ? c2.sel8() : (c2.sel7() && c2.alias_bit(kINT7))))
       return;
     double ptElectronMix = -999;
@@ -208,7 +213,7 @@ struct HfCorrelatorHfeHadrons {
     double etaHadronMix = -999;
     double phiHadronMix = -999;
     int poolBin = corrBinning.getBin(std::make_tuple(c2.posZ(), c2.multFV0M()));
-    for (auto &[t1, t2] :
+    for (auto& [t1, t2] :
          combinations(CombinationsFullIndexPolicy(tracks1, tracks2))) {
       if (!t1.isEmcal())
         continue;
@@ -235,8 +240,9 @@ struct HfCorrelatorHfeHadrons {
 
   // =======  Process starts for Data, Same event ============
 
-  void processData(TableCollision const &collision,
-                   aod::HfSelEl const &electron, TableTracks const &tracks) {
+  void processData(TableCollision const& collision,
+                   aod::HfSelEl const& electron, TableTracks const& tracks)
+  {
     fillCorrelation(collision, electron, tracks);
   }
 
@@ -244,9 +250,10 @@ struct HfCorrelatorHfeHadrons {
 
   // =======  Process starts for McRec, Same event ============
 
-  void processMcRec(McTableCollision const &mcCollision,
-                    aod::HfSelEl const &mcElectron,
-                    McTableTracks const &mcTracks) {
+  void processMcRec(McTableCollision const& mcCollision,
+                    aod::HfSelEl const& mcElectron,
+                    McTableTracks const& mcTracks)
+  {
     fillCorrelation(mcCollision, mcElectron, mcTracks);
   }
 
@@ -256,15 +263,16 @@ struct HfCorrelatorHfeHadrons {
   // ====================== Implement Event mixing on Data
   // ===================================
 
-  void processDataMixedEvent(TableCollisions const &collision,
-                             aod::HfSelEl const &electron,
-                             TableTracks const &tracks) {
+  void processDataMixedEvent(TableCollisions const& collision,
+                             aod::HfSelEl const& electron,
+                             TableTracks const& tracks)
+  {
     auto tracksTuple = std::make_tuple(electron, tracks);
     Pair<TableCollisions, aod::HfSelEl, TableTracks, BinningType> pair{
-        corrBinning, 5, -1, collision, tracksTuple, &cache};
+      corrBinning, 5, -1, collision, tracksTuple, &cache};
 
     // loop over the rows of the new table
-    for (auto &[c1, tracks1, c2, tracks2] : pair) {
+    for (auto& [c1, tracks1, c2, tracks2] : pair) {
 
       fillMixCorrelation(c1, c2, tracks1, tracks2);
     }
@@ -275,15 +283,16 @@ struct HfCorrelatorHfeHadrons {
   // ====================== Implement Event mixing on McRec
   // ===================================
 
-  void processMcRecMixedEvent(McTableCollisions const &mccollision,
-                              aod::HfSelEl const &electron,
-                              McTableTracks const &mcTracks) {
+  void processMcRecMixedEvent(McTableCollisions const& mccollision,
+                              aod::HfSelEl const& electron,
+                              McTableTracks const& mcTracks)
+  {
     auto tracksTuple = std::make_tuple(electron, mcTracks);
     Pair<McTableCollisions, aod::HfSelEl, McTableTracks, BinningType> pairMcRec{
-        corrBinning, 5, -1, mccollision, tracksTuple, &cache};
+      corrBinning, 5, -1, mccollision, tracksTuple, &cache};
 
     // loop over the rows of the new table
-    for (auto &[c1, tracks1, c2, tracks2] : pairMcRec) {
+    for (auto& [c1, tracks1, c2, tracks2] : pairMcRec) {
 
       fillMixCorrelation(c1, c2, tracks1, tracks2);
     }
@@ -292,6 +301,7 @@ struct HfCorrelatorHfeHadrons {
                  "Process Mixed Event MC Reco mode", false);
 };
 
-WorkflowSpec defineDataProcessing(ConfigContext const &cfgc) {
+WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
+{
   return WorkflowSpec{adaptAnalysisTask<HfCorrelatorHfeHadrons>(cfgc)};
 }
