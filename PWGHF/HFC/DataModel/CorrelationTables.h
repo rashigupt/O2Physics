@@ -441,7 +441,6 @@ DECLARE_SOA_COLUMN(DmesonSel, dmesonSel, bool); //! Selection flag for D meson i
 DECLARE_SOA_TABLE(DmesonSelection, "AOD", "DINCOLL", // Selection of D meson in collisions
                   aod::hf_selection_dmeson_collision::DmesonSel);
 
-
 // Note: definition of columns and tables for Electron Hadron correlation pairs
 namespace hf_correlation_electron_hadron
 {
