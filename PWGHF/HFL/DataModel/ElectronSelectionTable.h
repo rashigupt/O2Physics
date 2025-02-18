@@ -86,7 +86,7 @@ DECLARE_SOA_COLUMN(TofNSigmaElTrack, tofNSigmaElTrack, float); //! tofNSigma of 
 DECLARE_SOA_COLUMN(IsLSElectron, isLSElectron, int);           //! Like sign electron information
 DECLARE_SOA_COLUMN(IsULSElectron, isULSElectron, int);         //! Unlike sign electron information
 DECLARE_SOA_COLUMN(IsEmcal, isEmcal, bool);                    //! electron information
-} // namespace Hf_corr_sel_electron
+} // namespace hf_corr_sel_electron
 
 DECLARE_SOA_TABLE(HfCorrSelEl, "AOD", "HfCORRSELEL", //! Electron Informations
                   o2::soa::Index<>,
@@ -111,7 +111,7 @@ DECLARE_SOA_COLUMN(PhiTrackMc, phiTrackMc, float);  //! azimuth of the electron 
 DECLARE_SOA_COLUMN(PtTrackMc, ptTrackMc, float);    //! transverse momentum of the electron track
 DECLARE_SOA_COLUMN(IsNonHfeMc, isNonHfeMc, bool);   //! Non-Heavy flavour  electron information
 
-} // namespace HfMcGen_sel_electron
+} // namespace hfMcGen_sel_electron
 
 DECLARE_SOA_TABLE(HfMcGenSelEl, "AOD", "HFMCGENSELEL", //! Electron Informations
                   o2::soa::Index<>,
