@@ -51,7 +51,6 @@ DECLARE_SOA_COLUMN(DeltaPhiMatch, deltaPhiMatch, float); //! dPhi matched track 
 DECLARE_SOA_COLUMN(IsEmcal, isEmcal, bool);              //! electron information with Emcal
 =======
 
-
 } // namespace hf_sel_electron
 DECLARE_SOA_TABLE(HfSelEl, "AOD", "HFSELEL", //! Electron Informations
                   o2::soa::Index<>,
@@ -91,8 +90,6 @@ DECLARE_SOA_COLUMN(IsLSElectron, isLSElectron, int);           //! Like sign ele
 DECLARE_SOA_COLUMN(IsULSElectron, isULSElectron, int);         //! Unlike sign electron information
 DECLARE_SOA_COLUMN(IsEmcal, isEmcal, bool);                    //! electron information
 } // namespace hf_corr_sel_electron
-
-
 
 DECLARE_SOA_TABLE(HfCorrSelEl, "AOD", "HfCORRSELEL", //! Electron Informations
                   o2::soa::Index<>,
