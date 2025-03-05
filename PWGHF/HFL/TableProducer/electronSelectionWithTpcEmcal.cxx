@@ -47,7 +47,6 @@ const int passEMCalBins = 3;
 const int passEMCalAxisMin = 0.;
 const int passEMCalAxisMax = 3;
 
-
 const int eopAxisBins = 60;
 const float eopAxisMin = 0.;
 const float eopAxisMax = 3.0;
@@ -99,7 +98,6 @@ struct HfElectronSelectionWithTpcEmcal {
   Configurable<float> tpcNsigmaAssoElectronMax{"tpcNsigmaAssoElectronMax", 3.0f, "max Associated Electron TPCnsigma"};
   Configurable<float> invariantMass{"invariantMass", 0.14f, "max Invariant Mass for Photonic electron"};
   Configurable<float> chiSquareMax{"chiSquareMax", 3.0f, "chiSquare on the reconstructed parent particle"};
-
 
   // EtMcal and Dcal selection cut
 
@@ -180,8 +178,8 @@ struct HfElectronSelectionWithTpcEmcal {
   HistogramRegistry registry{
     "registry",
     {{"hNevents", "No of events", {HistType::kTH1F, {{3, 1, 4}}}},
-<
-     {"hZvertex", "z vertex", {HistType::kTH1F, {{binsPosZ}}}},
+     <
+       {"hZvertex", "z vertex", {HistType::kTH1F, {{binsPosZ}}}},
      {"hLikeMass", "Like mass", {HistType::kTH1F, {{binsMass}}}},
      {"hUnLikeMass", "unLike mass", {HistType::kTH1F, {{binsMass}}}},
      {"hLikeSignPt", "Like sign Momentum ", {HistType::kTH1F, {{binsP}}}},
@@ -350,7 +348,6 @@ struct HfElectronSelectionWithTpcEmcal {
         continue;
       }
 
-
       if (std::sqrt(std::abs(chi2recg)) > chiSquareMax) {
         continue;
       }
@@ -374,8 +371,6 @@ struct HfElectronSelectionWithTpcEmcal {
         }
       }
 
-
-
       if (std::sqrt(std::abs(chi2recg)) > chiSquareMax) {
         continue;
       }
@@ -398,7 +393,6 @@ struct HfElectronSelectionWithTpcEmcal {
           registry.fill(HIST("hUnLikeMass"), massUnLike);
         }
       }
-
 
       // for like charge
       if (isLSElectron && (invMassElectron <= invariantMass)) {
@@ -679,11 +673,9 @@ struct HfElectronSelectionWithTpcEmcal {
     }
   }
 
-
   PROCESS_SWITCH(HfElectronSelectionWithTpcEmcal, processMcGen, "Process MC Gen mode", false);
 =======
   PROCESS_SWITCH(HfElectronSelectionWithTpcEmcal, processMcGen, "Process MC Gen mode", true);
-
 };
 
 WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
