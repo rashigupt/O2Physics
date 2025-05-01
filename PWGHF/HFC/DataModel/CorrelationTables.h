@@ -479,7 +479,7 @@ DECLARE_SOA_COLUMN(PtElectron, ptElectron, float); //! Transverse momentum of el
 DECLARE_SOA_COLUMN(LSElCount, lSElCounts, int);    //! like sign Electron
 DECLARE_SOA_COLUMN(ULSElCount, uLSElCount, int);   //! unLike sign Electron
 DECLARE_SOA_COLUMN(PoolBin, poolBin, int);         //! Pool Bin of event defined using zvtx and multiplicity
-DECLARE_SOA_COLUMN(CollisionId, collisionId, int);     //! Global index for the collision
+DECLARE_SOA_COLUMN(CollisionId, collisionId, int); //! Global index for the collision
 DECLARE_SOA_COLUMN(TimeStamp, timeStamp, int64_t); //! Timestamp for the collision
 
 } // namespace hf_electron
