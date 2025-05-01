@@ -494,7 +494,6 @@ DECLARE_SOA_TABLE(HfElectron, "AOD", "HFELECTRON", //! Hf Electron properties
                   aod::hf_electron::GIndexCol,
                   aod::hf_electron::TimeStamp);
 
-
 namespace hf_correlation_electron_hadron
 {
 DECLARE_SOA_COLUMN(DeltaPhi, deltaPhi, float);           //! DeltaPhi between Electron and Hadrons
