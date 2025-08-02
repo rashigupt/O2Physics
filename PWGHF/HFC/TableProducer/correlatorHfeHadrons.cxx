@@ -238,7 +238,7 @@ struct HfCorrelatorHfeHadrons {
         entryElectronHadronPair(deltaPhi, deltaEta, ptElectron, ptHadron, poolBin, nElHadLSCorr, nElHadUSCorr);
 
       } // end Hadron Track loop
-    }   // end Electron loop
+    } // end Electron loop
   }
 
   // mix event electron-hadron correlation
