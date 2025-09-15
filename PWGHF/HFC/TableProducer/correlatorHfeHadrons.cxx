@@ -194,120 +194,119 @@ struct HfCorrelatorHfeHadrons {
         registry.fill(HIST("hptHadron"), hTrack.pt());
         entryHadron(hTrack.phi(), hTrack.eta(), hTrack.pt(), poolBin, gCollisionId, timeStamp);
       }
-    
-    for (const auto& hTrack : tracks) {
-      if (!selAssoHadron(hTrack)) {
-        continue;
-      }
-      registry.fill(HIST("hTracksBin"), poolBin);
-      entryHadron(hTrack.phi(), hTrack.eta(), hTrack.pt(), poolBin, gCollisionId, timeStamp);
-
-    }
-
-    //  Construct Deta Phi between electrons and hadrons
-
-    double ptElectron = -999;
-    double phiElectron = -999;
-    double etaElectron = -999;
-
-    for (const auto& eTrack : electron) {
-      ptElectron = eTrack.ptTrack();
-      phiElectron = eTrack.phiTrack();
-      etaElectron = eTrack.etaTrack();
-      bool acceptElectron = false;
-
-      double deltaPhi = -999;
-      double deltaEta = -999;
-      double ptHadron = -999;
-      double etaHadron = -999;
-      double phiHadron = -999;
-      if (eTrack.isEmcal()) {
-        // EMCal electron
-        if (requireEmcal) {
-          acceptElectron = true;
-        }
-      } else {
-        // Non-EMCal electron
-        if (!requireEmcal) {
-          // Apply sigma cut
-          if (std::abs(eTrack.tofNSigmaElTrack()) < tofNSigmaEl) {
-            if (eTrack.tpcNSigmaElTrack() > tpcNsigmaElectronMin && eTrack.tpcNSigmaElTrack() < tpcNsigmaElectronMax) {
-              registry.fill(HIST("hTofnSigmaVsP"), eTrack.tofNSigmaElTrack(), eTrack.ptTrack());
-              registry.fill(HIST("hTpcnSigmaVsP"), eTrack.tpcNSigmaElTrack(), eTrack.ptTrack());
-              acceptElectron = true;
-            }
-          }
-        }
-      }
-
-      if (!acceptElectron)
-        continue; // skip electron if not passing criteria
-
-      registry.fill(HIST("hptElectron"), ptElectron);
-      int nElectronLS = 0;
-      int nElectronUS = 0;
-      if (eTrack.nElPairLS() > 0) {
-        for (int i = 0; i < eTrack.nElPairLS(); ++i) {
-
-          ++nElectronLS;
-          registry.fill(HIST("hLSElectronBin"), poolBin);
-        }
-      }
-      if (eTrack.nElPairUS() > 0) {
-        for (int i = 0; i < eTrack.nElPairUS(); ++i) {
-
-          ++nElectronUS;
-          registry.fill(HIST("hULSElectronBin"), poolBin);
-        }
-      }
-
-      if (!skipEventTableFilling) {
-        registry.fill(HIST("hElectronBin"), poolBin);
-        entryElectron(phiElectron, etaElectron, ptElectron, nElectronLS, nElectronUS, poolBin, gCollisionId, timeStamp);
-      }
 
       for (const auto& hTrack : tracks) {
-        // Apply Hadron cut
         if (!selAssoHadron(hTrack)) {
           continue;
         }
-        ptHadron = hTrack.pt();
-        phiHadron = hTrack.phi();
-        etaHadron = hTrack.eta();
-        if (hTrack.globalIndex() == eTrack.trackId()) {
-          continue;
+        registry.fill(HIST("hTracksBin"), poolBin);
+        entryHadron(hTrack.phi(), hTrack.eta(), hTrack.pt(), poolBin, gCollisionId, timeStamp);
+      }
+
+      //  Construct Deta Phi between electrons and hadrons
+
+      double ptElectron = -999;
+      double phiElectron = -999;
+      double etaElectron = -999;
+
+      for (const auto& eTrack : electron) {
+        ptElectron = eTrack.ptTrack();
+        phiElectron = eTrack.phiTrack();
+        etaElectron = eTrack.etaTrack();
+        bool acceptElectron = false;
+
+        double deltaPhi = -999;
+        double deltaEta = -999;
+        double ptHadron = -999;
+        double etaHadron = -999;
+        double phiHadron = -999;
+        if (eTrack.isEmcal()) {
+          // EMCal electron
+          if (requireEmcal) {
+            acceptElectron = true;
+          }
+        } else {
+          // Non-EMCal electron
+          if (!requireEmcal) {
+            // Apply sigma cut
+            if (std::abs(eTrack.tofNSigmaElTrack()) < tofNSigmaEl) {
+              if (eTrack.tpcNSigmaElTrack() > tpcNsigmaElectronMin && eTrack.tpcNSigmaElTrack() < tpcNsigmaElectronMax) {
+                registry.fill(HIST("hTofnSigmaVsP"), eTrack.tofNSigmaElTrack(), eTrack.ptTrack());
+                registry.fill(HIST("hTpcnSigmaVsP"), eTrack.tpcNSigmaElTrack(), eTrack.ptTrack());
+                acceptElectron = true;
+              }
+            }
+          }
         }
 
-        if (ptCondition && (ptElectron < ptHadron)) {
-          continue;
-        }
+        if (!acceptElectron)
+          continue; // skip electron if not passing criteria
 
-        deltaPhi = RecoDecay::constrainAngle(phiElectron - phiHadron, -o2::constants::math::PIHalf);
-        deltaEta = etaElectron - etaHadron;
-        registry.fill(HIST("hInclusiveEHCorrel"), ptElectron, ptHadron, deltaPhi, deltaEta);
-
-        int nElHadLSCorr = 0;
-        int nElHadUSCorr = 0;
+        registry.fill(HIST("hptElectron"), ptElectron);
+        int nElectronLS = 0;
+        int nElectronUS = 0;
         if (eTrack.nElPairLS() > 0) {
           for (int i = 0; i < eTrack.nElPairLS(); ++i) {
 
-            ++nElHadLSCorr;
-            registry.fill(HIST("hLSEHCorrel"), ptElectron, ptHadron, deltaPhi, deltaEta);
+            ++nElectronLS;
+            registry.fill(HIST("hLSElectronBin"), poolBin);
           }
         }
         if (eTrack.nElPairUS() > 0) {
           for (int i = 0; i < eTrack.nElPairUS(); ++i) {
 
-            registry.fill(HIST("hULSEHCorrel"), ptElectron, ptHadron, deltaPhi, deltaEta);
-            ++nElHadUSCorr;
+            ++nElectronUS;
+            registry.fill(HIST("hULSElectronBin"), poolBin);
           }
         }
-        entryElectronHadronPair(deltaPhi, deltaEta, ptElectron, ptHadron, poolBin, nElHadLSCorr, nElHadUSCorr);
 
-      } // end Hadron Track loop
+        if (!skipEventTableFilling) {
+          registry.fill(HIST("hElectronBin"), poolBin);
+          entryElectron(phiElectron, etaElectron, ptElectron, nElectronLS, nElectronUS, poolBin, gCollisionId, timeStamp);
+        }
 
-    } // end Electron loop
-  }
+        for (const auto& hTrack : tracks) {
+          // Apply Hadron cut
+          if (!selAssoHadron(hTrack)) {
+            continue;
+          }
+          ptHadron = hTrack.pt();
+          phiHadron = hTrack.phi();
+          etaHadron = hTrack.eta();
+          if (hTrack.globalIndex() == eTrack.trackId()) {
+            continue;
+          }
+
+          if (ptCondition && (ptElectron < ptHadron)) {
+            continue;
+          }
+
+          deltaPhi = RecoDecay::constrainAngle(phiElectron - phiHadron, -o2::constants::math::PIHalf);
+          deltaEta = etaElectron - etaHadron;
+          registry.fill(HIST("hInclusiveEHCorrel"), ptElectron, ptHadron, deltaPhi, deltaEta);
+
+          int nElHadLSCorr = 0;
+          int nElHadUSCorr = 0;
+          if (eTrack.nElPairLS() > 0) {
+            for (int i = 0; i < eTrack.nElPairLS(); ++i) {
+
+              ++nElHadLSCorr;
+              registry.fill(HIST("hLSEHCorrel"), ptElectron, ptHadron, deltaPhi, deltaEta);
+            }
+          }
+          if (eTrack.nElPairUS() > 0) {
+            for (int i = 0; i < eTrack.nElPairUS(); ++i) {
+
+              registry.fill(HIST("hULSEHCorrel"), ptElectron, ptHadron, deltaPhi, deltaEta);
+              ++nElHadUSCorr;
+            }
+          }
+          entryElectronHadronPair(deltaPhi, deltaEta, ptElectron, ptHadron, poolBin, nElHadLSCorr, nElHadUSCorr);
+
+        } // end Hadron Track loop
+
+      } // end Electron loop
+    }
 
   // mix event electron-hadron correlation
 
