@@ -384,7 +384,7 @@ struct HfElectronSelectionWithTpcEmcal {
     int region = emcalRegion;
     registry.fill(HIST("hNevents"), region)
 
-    registry.fill(HIST("hNevents"), 1);
+      registry.fill(HIST("hNevents"), 1);
 
     // skip events with no clusters
     if (emcClusters.size() == 0 && skipNoEmcClusters) {
@@ -580,10 +580,8 @@ struct HfElectronSelectionWithTpcEmcal {
           if (std::abs(mother.pdgCode()) == kEtaLocal || std::abs(mother.pdgCode()) == kPi0 || std::abs(mother.pdgCode()) == kGamma) {
             registry.fill(HIST("hMcgenAllNonHfeElectron"), particleMc.pt());
 
-
             auto const& gmother = mother.mothers_first_as<aod::McParticles>();
             // cases to consider: eta->e, eta->pi0->e, eta->gamma->e, eta->pi0->gamma->e, pi0->e, pi0->gamma->e
-
 
             //=================  eta->e ======================================
             if (std::abs(mother.pdgCode()) == kEtaLocal) {
