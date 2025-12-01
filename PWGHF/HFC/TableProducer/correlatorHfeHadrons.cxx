@@ -228,7 +228,6 @@ struct HfCorrelatorHfeHadrons {
       } else if (!eTrack.isEmcal() && !requireEmcal) {
 
         acceptElectron = true;
-
       }
 
       if (!acceptElectron) {
