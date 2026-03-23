@@ -175,9 +175,6 @@ struct SginclusivePhiKstarSD {
 
     registry.add("GapSide", "Gap Side; Entries", kTH1F, {{4, -1.5, 2.5}});
     registry.add("TrueGapSide", "Gap Side; Entries", kTH1F, {{4, -1.5, 2.5}});
-    registry.add("nPVContributors_data", "Multiplicity_dist_before track cut gap A", kTH1F, {{110, 0, 110}});
-    registry.add("nPVContributors_data_1", "Multiplicity_dist_before track cut gap C", kTH1F, {{110, 0, 110}});
-
     registry.add("hRotation", "hRotation", kTH1F, {{360, 0.0, o2::constants::math::TwoPI}});
 
     if (phi) {
@@ -334,6 +331,7 @@ struct SginclusivePhiKstarSD {
 
         registry.add("MC/accMPtRap_phi_G", "Generated Phi; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{220, 0.98, 1.20}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
         registry.add("MC/accMPtRap_phi_G1", "Generated Phi1; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{220, 0.98, 1.20}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
+        registry.add("MC/accMPtRap_phi_G11", "Generated Phi11; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{220, 0.98, 1.20}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
         registry.add("MC/accMPtRap_phi_G2", "Generated Phi2; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{220, 0.98, 1.20}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
 
         registry.add("MC/accEtaPt", "Generated events in acceptance; eta (1); #it{p}_{T} (GeV/#it{c})", {HistType::kTH2F, {{60, -1.5, 1.5}, {250, 0.0, 5.0}}});
@@ -347,6 +345,7 @@ struct SginclusivePhiKstarSD {
         // K*0
         registry.add("MC/accMPtRap_kstar_G", "Generated K*0; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{400, 0., 2.0}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
         registry.add("MC/accMPtRap_kstar_G1", "Generated K*0 from kp; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{400, 0., 2.0}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
+        registry.add("MC/accMPtRap_kstar_G11", "Generated K*0 from kp1; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{400, 0., 2.0}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
         registry.add("MC/accMPtRap_kstar_G2", "Generated K*0 from kp2; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{400, 0., 2.0}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
         registry.add("MC/genEtaPt_k", "Generated events; eta (1); #it{p}_{T} (GeV/#it{c})", {HistType::kTH2F, {{60, -1.5, 1.5}, {250, 0.0, 5.0}}});
         registry.add("MC/genRap_k", "Generated events; Rapidity (1)", {HistType::kTH1F, {{60, -1.5, 1.5}}});
@@ -369,6 +368,7 @@ struct SginclusivePhiKstarSD {
           "All Events",
           "has_udMcCollision",
           Form("generatorsID = %d", generatedId.value),
+          Form("upcFlag = %d%s", upcflag.value, check(upcflag.value != -1)),
           Form("GapsideMC = %d", gapsideMC.value),
           Form("|Vz| < %.1f", vzCut.value),
           Form("Occupancy < %.0f%s", confgOccCut.value, check(useOccCut.value)),
@@ -382,7 +382,6 @@ struct SginclusivePhiKstarSD {
           std::string("kIsGoodZvtxFT0vsPV") + check(useZvtxftovpv.value),
           std::string("kIsVertexITSTPC") + check(useVtxItsTpc.value),
           Form("RCTFlag = %d%s", cutRCTflag.value, check(cutRCTflag.value > 0)),
-          Form("upcFlag = %d%s", upcflag.value, check(upcflag.value != -1)),
           Form("%d < numContrib < %d%s", mintrack.value, maxtrack.value, check(usenumContrib.value))};
 
         for (size_t i = 0; i < eveCutLabelsMC.size(); ++i) {
@@ -390,7 +389,6 @@ struct SginclusivePhiKstarSD {
         }
 
         registry.add("Reco/Stat", "Count reconstruted events; ; Entries", {HistType::kTH1F, {{5, -0.5, 4.5}}});
-        registry.add("Reco/nPVContributors", "Number of PV contributors per collision; Number of PV contributors; Entries", {HistType::kTH1F, {{51, -0.5, 50.5}}});
         registry.add("Reco/selRap", "Selected events in acceptance; Rapidity (1)", {HistType::kTH1F, {{60, -1.5, 1.5}}});
         registry.add("Reco/selMPt", "Reconstructed events in acceptance; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH2F, {{220, 0.98, 1.20}, {200, 0.0, 10.0}}});
         registry.add("Reco/selMPtRap", "Reconstructed events in acceptance; Mass (GeV/#it{c}^2); #it{p}_{T} (GeV/#it{c})", {HistType::kTH3F, {{220, 0.98, 1.20}, {200, 0.0, 10.0}, {60, -1.5, 1.5}}});
@@ -600,67 +598,67 @@ struct SginclusivePhiKstarSD {
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 1);
 
-    if (std::abs(collision.posZ()) > vzCut)
+    if (upcflag != -1 && collision.flags() != upcflag)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 2);
 
-    if (useOccCut && (std::abs(collision.occupancyInTime()) > confgOccCut))
+    if (std::abs(collision.posZ()) > vzCut)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 3);
 
-    if (useHadronicRateCut && (std::abs(collision.hadronicRate()) > confgHadronicRateMax || std::abs(collision.hadronicRate()) < confgHadronicRateMin))
+    if (useOccCut && (std::abs(collision.occupancyInTime()) > confgOccCut))
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 4);
 
-    if (useTrs && collision.trs() != 1)
+    if (useHadronicRateCut && (std::abs(collision.hadronicRate()) > confgHadronicRateMax || std::abs(collision.hadronicRate()) < confgHadronicRateMin))
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 5);
 
-    if (useTrofs && collision.trofs() != 1)
+    if (useTrs && collision.trs() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 6);
 
-    if (useHmpr && collision.hmpr() != 1)
+    if (useTrofs && collision.trofs() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 7);
 
-    if (useTfb && collision.tfb() != 1)
+    if (useHmpr && collision.hmpr() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 8);
 
-    if (useItsrofb && collision.itsROFb() != 1)
+    if (useTfb && collision.tfb() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 9);
 
-    if (useSbp && collision.sbp() != 1)
+    if (useItsrofb && collision.itsROFb() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 10);
 
-    if (useZvtxftovpv && collision.zVtxFT0vPV() != 1)
+    if (useSbp && collision.sbp() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 11);
 
-    if (useVtxItsTpc && collision.vtxITSTPC() != 1)
+    if (useZvtxftovpv && collision.zVtxFT0vPV() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 12);
 
-    if (!isGoodRCTflag(collision))
+    if (useVtxItsTpc && collision.vtxITSTPC() != 1)
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 13);
 
-    if (upcflag != -1 && collision.flags() != upcflag)
+    if (!isGoodRCTflag(collision))
       return {false, gapSide};
     if (fillHist)
       registry.fill(HIST("hEventCutFlow"), 14);
@@ -1248,7 +1246,7 @@ struct SginclusivePhiKstarSD {
               registry.get<TH3>(HIST("MC/accMPtRap_kstar_G"))->Fill(v01.M(), v01.Pt(), v01.Rapidity(), 1.);
             }
             if (std::abs(vkstar.Rapidity()) < 0.5) {
-              //  registry.get<TH3>(HIST("MC/accMPtRap_kstar_G1"))->Fill(vkstar.M(), vkstar.Pt(), vkstar.Rapidity(), 1.);
+              registry.get<TH3>(HIST("MC/accMPtRap_kstar_G2"))->Fill(vkstar.M(), vkstar.Pt(), vkstar.Rapidity(), 1.);
             }
           }
         }
@@ -1411,128 +1409,131 @@ struct SginclusivePhiKstarSD {
     auto mccoll = collision.udMcCollision();
     if (mccoll.generatorsID() != generatedId)
       return;
-    if (upcflag != -1 && collision.flags() == upcflag) {
-      auto partSlice = McParts.sliceBy(partPerMcCollision, mccoll.globalIndex());
-      for (const auto& trk1 : partSlice) {
-        if (std::abs(trk1.pdgCode()) == o2::constants::physics::Pdg::kK0Star892) {
-          vkstar.SetCoordinates(trk1.px(), trk1.py(), trk1.pz(), o2::constants::physics::MassK0Star892);
-          auto kDaughters = trk1.daughters_as<aod::UDMcParticles>();
-          const size_t kExpectedNumberOfDaughters = 2;
-          if (kDaughters.size() != kExpectedNumberOfDaughters) {
-            continue;
-          }
-          auto daughtp = false;
-          auto daughtm = false;
-          for (const auto& kCurrentDaughter : kDaughters) {
-            if (!kCurrentDaughter.isPhysicalPrimary()) {
-              continue;
-            }
-            if (std::abs(kCurrentDaughter.pdgCode()) == PDG_t::kKPlus) {
-              daughtp = true;
-            } else if (std::abs(kCurrentDaughter.pdgCode()) == PDG_t::kPiPlus) {
-              daughtm = true;
-            }
-          }
-          if (daughtp && daughtm) {
-            if (std::abs(vkstar.Rapidity()) < 0.5) {
-              registry.get<TH3>(HIST("MC/accMPtRap_kstar_G1"))->Fill(vkstar.M(), vkstar.Pt(), vkstar.Rapidity(), 1.);
-            }
-          }
-        }
-        // phi
-        if (std::abs(trk1.pdgCode()) == o2::constants::physics::Pdg::kPhi) {
-          if (trk1.has_mothers()) {
-            continue;
-          }
-          vphi.SetCoordinates(trk1.px(), trk1.py(), trk1.pz(), o2::constants::physics::MassPhi);
-          auto kDaughters = trk1.daughters_as<aod::UDMcParticles>();
-          const size_t kExpectedNumberOfDaughters1 = 2;
-          if (kDaughters.size() != kExpectedNumberOfDaughters1) {
-            continue;
-          }
-          auto daughtp1 = false;
-          auto daughtm1 = false;
-          for (const auto& kCurrentDaughter : kDaughters) {
-            if (!kCurrentDaughter.isPhysicalPrimary()) {
-              continue;
-            }
-            if (kCurrentDaughter.pdgCode() == PDG_t::kKPlus) {
-              daughtp1 = true;
-            } else if (kCurrentDaughter.pdgCode() == PDG_t::kKMinus) {
-              daughtm1 = true;
-            }
-          }
-          if (daughtp1 && daughtm1) {
-            if (std::abs(vphi.Rapidity()) < 0.5) {
-              registry.get<TH3>(HIST("MC/accMPtRap_phi_G1"))->Fill(vphi.M(), vphi.Pt(), vphi.Rapidity(), 1.);
-            }
-          }
-        }
-      }
-    }
-
     registry.fill(HIST("Reco/hEventCutFlowMC"), 2);
+
+    if (upcflag != -1 && collision.flags() != upcflag)
+      return;
+    registry.fill(HIST("Reco/hEventCutFlowMC"), 3);
 
     float fitCut[5] = {fv0Cut, ft0aCut, ft0cCut, fddaCut, fddcCut};
     std::vector<float> parameters = {pvCut, dcazCut, dcaxyCut, tpcChi2Cut, tpcNClsFindableCut, itsChi2Cut, etaCut, ptCut};
     int truegapSide = sgSelector.trueGap(collision, fitCut[0], fitCut[1], fitCut[2], zdcCut);
     registry.get<TH1>(HIST("Reco/Stat"))->Fill(4.0, 1.);
     registry.get<TH1>(HIST("Reco/Stat"))->Fill(truegapSide, 1.);
-    if (truegapSide != gapsideMC)
-      return;
-    registry.fill(HIST("Reco/hEventCutFlowMC"), 3);
-    //    Partition<TCs> pvContributors = aod::udtrack::isPVContributor == true;
-    // pvContributors.bindTable(tracks);
 
-    if (std::abs(collision.posZ()) > vzCut)
+    auto partSlice = McParts.sliceBy(partPerMcCollision, mccoll.globalIndex());
+    for (const auto& trk1 : partSlice) {
+      if (std::abs(trk1.pdgCode()) == o2::constants::physics::Pdg::kK0Star892) {
+        vkstar.SetCoordinates(trk1.px(), trk1.py(), trk1.pz(), o2::constants::physics::MassK0Star892);
+        auto kDaughters = trk1.daughters_as<aod::UDMcParticles>();
+        const size_t kExpectedNumberOfDaughters = 2;
+        if (kDaughters.size() != kExpectedNumberOfDaughters) {
+          continue;
+        }
+        auto daughtp = false;
+        auto daughtm = false;
+        for (const auto& kCurrentDaughter : kDaughters) {
+          if (!kCurrentDaughter.isPhysicalPrimary()) {
+            continue;
+          }
+          if (std::abs(kCurrentDaughter.pdgCode()) == PDG_t::kKPlus) {
+            daughtp = true;
+          } else if (std::abs(kCurrentDaughter.pdgCode()) == PDG_t::kPiPlus) {
+            daughtm = true;
+          }
+        }
+        if (daughtp && daughtm) {
+          if (std::abs(vkstar.Rapidity()) < 0.5) {
+            registry.get<TH3>(HIST("MC/accMPtRap_kstar_G1"))->Fill(vkstar.M(), vkstar.Pt(), vkstar.Rapidity(), 1.);
+            if (truegapSide == gapsideMC) {
+              registry.get<TH3>(HIST("MC/accMPtRap_kstar_G11"))->Fill(vkstar.M(), vkstar.Pt(), vkstar.Rapidity(), 1.);
+            }
+          }
+        }
+      }
+      // phi
+      if (std::abs(trk1.pdgCode()) == o2::constants::physics::Pdg::kPhi) {
+        if (trk1.has_mothers()) {
+          continue;
+        }
+        vphi.SetCoordinates(trk1.px(), trk1.py(), trk1.pz(), o2::constants::physics::MassPhi);
+        auto kDaughters = trk1.daughters_as<aod::UDMcParticles>();
+        const size_t kExpectedNumberOfDaughters1 = 2;
+        if (kDaughters.size() != kExpectedNumberOfDaughters1) {
+          continue;
+        }
+        auto daughtp1 = false;
+        auto daughtm1 = false;
+        for (const auto& kCurrentDaughter : kDaughters) {
+          if (!kCurrentDaughter.isPhysicalPrimary()) {
+            continue;
+          }
+          if (kCurrentDaughter.pdgCode() == PDG_t::kKPlus) {
+            daughtp1 = true;
+          } else if (kCurrentDaughter.pdgCode() == PDG_t::kKMinus) {
+            daughtm1 = true;
+          }
+        }
+        if (daughtp1 && daughtm1) {
+          if (std::abs(vphi.Rapidity()) < 0.5) {
+            registry.get<TH3>(HIST("MC/accMPtRap_phi_G1"))->Fill(vphi.M(), vphi.Pt(), vphi.Rapidity(), 1.);
+            if (truegapSide == gapsideMC) {
+              registry.get<TH3>(HIST("MC/accMPtRap_phi_G11"))->Fill(vphi.M(), vphi.Pt(), vphi.Rapidity(), 1.);
+            }
+          }
+        }
+      }
+    }
+
+    if (truegapSide != gapsideMC)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 4);
 
-    if (useOccCut && (std::abs(collision.occupancyInTime()) > confgOccCut))
+    if (std::abs(collision.posZ()) > vzCut)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 5);
 
-    if (useHadronicRateCut && (std::abs(collision.hadronicRate()) > confgHadronicRateMax || std::abs(collision.hadronicRate()) < confgHadronicRateMin))
+    if (useOccCut && (std::abs(collision.occupancyInTime()) > confgOccCut))
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 6);
 
-    if (useTrs && collision.trs() != 1)
+    if (useHadronicRateCut && (std::abs(collision.hadronicRate()) > confgHadronicRateMax || std::abs(collision.hadronicRate()) < confgHadronicRateMin))
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 7);
 
-    if (useTrofs && collision.trofs() != 1)
+    if (useTrs && collision.trs() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 8);
 
-    if (useHmpr && collision.hmpr() != 1)
+    if (useTrofs && collision.trofs() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 9);
 
-    if (useTfb && collision.tfb() != 1)
+    if (useHmpr && collision.hmpr() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 10);
 
-    if (useItsrofb && collision.itsROFb() != 1)
+    if (useTfb && collision.tfb() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 11);
 
-    if (useSbp && collision.sbp() != 1)
+    if (useItsrofb && collision.itsROFb() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 12);
 
-    if (useZvtxftovpv && collision.zVtxFT0vPV() != 1)
+    if (useSbp && collision.sbp() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 13);
 
-    if (useVtxItsTpc && collision.vtxITSTPC() != 1)
+    if (useZvtxftovpv && collision.zVtxFT0vPV() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 14);
 
-    if (!isGoodRCTflag(collision))
+    if (useVtxItsTpc && collision.vtxITSTPC() != 1)
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 15);
 
-    if (upcflag != -1 && collision.flags() != upcflag)
+    if (!isGoodRCTflag(collision))
       return;
     registry.fill(HIST("Reco/hEventCutFlowMC"), 16);
 
@@ -1547,9 +1548,6 @@ struct SginclusivePhiKstarSD {
       rQA.fill(HIST("hVertexZ_mc"), collision.posZ());
     }
 
-    // registry.get<TH1>(HIST("Reco/nPVContributors"))->Fill(pvContributors.size(), 1.);
-    // ROOT::Math::PxPyPzMVector vphi;
-    // ROOT::Math::PxPyPzMVector vkstar;
     ROOT::Math::PxPyPzMVector v0;
     ROOT::Math::PxPyPzMVector vr0;
     ROOT::Math::PxPyPzMVector vr1;

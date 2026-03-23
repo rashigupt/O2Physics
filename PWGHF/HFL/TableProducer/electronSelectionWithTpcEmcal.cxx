@@ -201,8 +201,11 @@ struct HfElectronSelectionWithTpcEmcal {
     registry.add("hMcgenInElectron", "Mc Gen Inclusive Electron", {HistType::kTH1D, {{axisPt}}});
     registry.add("hMcRecInElectron", "Mc Rec Inclusive Electron", {HistType::kTH1D, {{axisPt}}});
     registry.add("hMcRecwithoutEMCalInElectron", "Mc Rec Inclusive Electron without Emcal", {HistType::kTH1D, {{axisPt}}});
+
     registry.add("hphiElectron", "hphiElectron", {HistType::kTH1D, {axisPhi}});
     registry.add("hphiElectronPassEmcal", "hphiElectron pass Emcal", {HistType::kTH1D, {axisPhi}});
+
+
     registry.add("hMcgenAllNonHfeElectron", "Mc Gen All NonHf Electron", {HistType::kTH1D, {{axisPt}}});
     registry.add("hMcgenNonHfeElectron", "Mc Gen NonHf  Electron with mother", {HistType::kTH1D, {{axisPt}}});
     registry.add("hPi0eEmbTrkPt", "Mc Gen  Pi0 mother NonHf Electron", {HistType::kTH1D, {{axisPt}}});
@@ -555,6 +558,7 @@ struct HfElectronSelectionWithTpcEmcal {
               bool isEmbEta = false;
               bool isEmbPi0 = false;
 
+
               // Check first mother
               if (mcParticle.has_mothers()) {
                 auto const& mother = mcParticle.template mothers_first_as<aod::McParticles>();
@@ -598,6 +602,52 @@ struct HfElectronSelectionWithTpcEmcal {
                     }
                   }
 
+
+
+              // Check first mother
+              if (mcParticle.has_mothers()) {
+                auto const& mother = mcParticle.template mothers_first_as<aod::McParticles>();
+
+                if (std::abs(mother.pdgCode()) == kEtaLocal || std::abs(mother.pdgCode()) == kPi0 || std::abs(mother.pdgCode()) == kGamma) {
+
+                  auto const& gmother = mother.template mothers_first_as<aod::McParticles>();
+                  // cases to consider: eta->e, eta->pi0->e, eta->gamma->e, eta->pi0->gamma->e, pi0->e, pi0->gamma->e
+
+                  //=================  eta->e ======================================
+                  if (std::abs(mother.pdgCode()) == kEtaLocal) {
+
+                    if (mother.isPhysicalPrimary()) {
+                      if ((std::abs(gmother.pdgCode()) >= pdgCodeCharmMin && std::abs(gmother.pdgCode()) < pdgCodeCharmMax) ||
+                          (std::abs(gmother.pdgCode()) >= pdgCodeBeautyMin && std::abs(gmother.pdgCode()) < pdgCodeBeautyMax)) {
+                        continue;
+                      }
+                      isEmbEta = true;
+                    }
+                  }
+
+                  //=================  eta->pi0->e ======================================
+
+                  if (std::abs(mother.pdgCode()) == kPi0) {
+                    if (mother.isPhysicalPrimary()) {
+                      if ((std::abs(gmother.pdgCode()) >= pdgCodeCharmMin && std::abs(gmother.pdgCode()) < pdgCodeCharmMax) ||
+                          (std::abs(gmother.pdgCode()) >= pdgCodeBeautyMin && std::abs(gmother.pdgCode()) < pdgCodeBeautyMax)) {
+                        continue;
+                      }
+                      isEmbPi0 = true; // pi0 -> e
+                    }
+                    if (std::abs(gmother.pdgCode()) == kEtaLocal) {
+                      if (gmother.isPhysicalPrimary() || gmother.has_mothers()) {
+                        auto const& ggmother = gmother.template mothers_first_as<aod::McParticles>();
+                        if ((std::abs(ggmother.pdgCode()) >= pdgCodeCharmMin && std::abs(ggmother.pdgCode()) < pdgCodeCharmMax) ||
+                            (std::abs(ggmother.pdgCode()) >= pdgCodeBeautyMin && std::abs(ggmother.pdgCode()) < pdgCodeBeautyMax)) {
+                          continue;
+                        }
+                        isEmbEta = true; // eta->pi0-> e
+                      }
+                    }
+                  }
+
+>
                   /// ====================================  eta->gamma->e  and eta->pi0->gamma->e============
                   if (std::abs(mother.pdgCode()) == kGamma) {
 
@@ -662,11 +712,25 @@ struct HfElectronSelectionWithTpcEmcal {
       if ((track.tpcNSigmaEl() < tpcNsigmaElectronMin || track.tpcNSigmaEl() > tpcNsigmaElectronMax)) {
         continue;
       }
+
       registry.fill(HIST("hphiElectron"), track.phi());
+=======
+
       if constexpr (IsMc) {
         if (track.has_mcParticle()) {
           auto mcParticle = track.template mcParticle_as<aod::McParticles>();
           if (std::abs(mcParticle.pdgCode()) == kElectron) {
+
+
+            registry.fill(HIST("hMcRecwithoutEMCalInElectron"), mcParticle.pt());
+            bool isEmbEta = false;
+            bool isEmbPi0 = false;
+
+            // Check first mother
+            if (mcParticle.has_mothers()) {
+              auto const& mother = mcParticle.template mothers_first_as<aod::McParticles>();
+
+
 
             registry.fill(HIST("hMcRecwithoutEMCalInElectron"), mcParticle.pt());
             bool isEmbEta = false;
