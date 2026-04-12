@@ -519,7 +519,6 @@ DECLARE_SOA_TABLE(HfElectron, "AOD", "HFELECTRON", //! Hf Electron properties
                   aod::hf_electron::GIndexCol,
                   aod::hf_electron::TimeStamp);
 
-
 // Note: definition of columns and tables for Electron Hadron correlation pairs for Data
 namespace hf_correlation_electron_hadron
 {
