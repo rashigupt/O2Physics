@@ -594,7 +594,6 @@ struct HfElectronSelectionWithTpcEmcal {
     // Pass multiplicities and other required parameters for this electron
 
     hfElectronSelection(electron.collisionId(), electron.globalIndex(), electron.eta(), electron.phi(), electron.pt(), electron.tpcNSigmaEl(), electron.tofNSigmaEl(), electron.tpcNClsCrossedRows(), electron.tpcCrossedRowsOverFindableCls(), electron.itsChi2NCl(), electron.tpcChi2NCl(), electron.dcaXY(), electron.dcaZ(), eop, m02, vecLSMass, vecULSMass, nElPairsLS, nElPairsUS, isEMcal);
-
   }
   // Electron Identification
   template <bool IsMc, typename TracksType, typename EmcClusterType, typename MatchType, typename CollisionType, typename ParticleType>
